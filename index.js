@@ -1,4 +1,8 @@
-BestMatch = function(term, fields) {
+function Hatchet(req) {
+  this.query = req.query;
+}
+
+Hatchet.prototype.BestMatch = function(term, fields) {
   var query = { 'dis_max': { 'queries': [] } };
   Object.keys(fields).forEach(function(field){
     var matchQuery = { 'match': {} };
@@ -9,23 +13,33 @@ BestMatch = function(term, fields) {
   return query;
 };
 
-Filter = function(reqQuery, fields){
+Hatchey.prototype._applyFilter = function(filterFlag) {
+  return self.query.hasOwnProperty(filterFlag);
+};
+
+Hatchet.prototype.Filter = function(fields){
+  var self = this;
   var filter = { 'bool': {} };
   Object.keys(fields).forEach(function(field){
-    if( reqQuery.hasOwnProperty(fields[field].filterFlag) ) {
+    var filterFlag = fields[field].filterFlag;
+    if(self._applyFilter) {
+      if (self.query[filterFlag] instanceof Array){
+
+      }
       var filterQuery = { 'fquery': {'query': {}} };
       var matchQuery = { 'match': {} };
       var type = fields[field].type;
-
       if (!filter.bool.hasOwnProperty(type) ) { filter.bool[type] = []; }
 
-      matchQuery.match[field] = { 'query': reqQuery[fields[field].filterFlag] };
+      matchQuery.match[field] = { 'query': self.query[fields[field].filterFlag] };
       filterQuery.fquery.query = matchQuery;
       filter.bool[type].push(filterQuery);
     }
   });
   return JSON.stringify(filter);
 };
+
+module.exports = Hatchet;
 
 ///////////////// TRAVERSIFY ^ ^^^^^^^^^^^^^^^^^^^^
 var fields = {
@@ -41,5 +55,11 @@ var fields = {
   'initials':                                  { boost:3, operator:'and' },
   'phones.ext':                                { analyzer:'name_query' }
 };
+
+var request = { query:{
+  search: 'luke',
+  hometown: 'Easton',
+  language: ['Spanish','English']
+}};
 
 BestMatch('luke',fields);
