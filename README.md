@@ -87,33 +87,40 @@ Conventional elasticsearch query library.
   }
 }
 
-{
-  "bool": {
-    "should": [
-      {
-        "fquery": {
-          "query": {
-            "match": {
-              "profile.hometown": {
-                "query": "Easton"
-              }
-            }
-          }
-        }
-      }
-    ],
-    "must": [
-      {
-        "fquery": {
-          "query": {
-            "match": {
-              "profile.languages": {
-                "query": "english"
-              }
-            }
-          }
-        }
-      }
-    ]
+
+
+
+//
+// var fields = {
+//   'displayName.displayName_exact':             { boost:2, operator:'and' },
+//   'displayName.displayName_typeahead_synonym': { operator:'and', analyzer:'name_query' },
+//   'displayName.displayName_typeahead_exact':   { operator:'and', analyzer:'name_query' },
+//   'initials':                                  { boost:3, operator:'and' },
+//   'phones.ext':                                { analyzer:'name_query' }
+// };
+//
+// var request = { query:{
+//   search: 'luke',
+//   hometown: 'Easton',
+//   language: ['Spanish','English']
+// }};
+//
+// BestMatch('luke',fields);
+
+
+
+
+
+
+var found = false
+agentId = '789'
+var x = [{'id':'123'},{'id':'456'},{'id':'789'}]
+
+x.every(function (manager) {
+
+  if ( manager.id === agentId ) {
+    found = true
+    return false
   }
-}
+  return true
+})
