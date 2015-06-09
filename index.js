@@ -69,11 +69,11 @@ var searchFields = {
 }
 
 var searchFields2 = [
-  { field: 'displayName.displayName_exact', boost: 2 },
-  { field: 'initials', boost: 3 },
+  { field: 'displayName.displayName_exact', boost: 2, analyzer: false},
+  { field: 'initials', boost: 3, analyzer: false },
   { field: 'displayName.displayName_typeahead_synonym' },
   { field: 'displayName.displayName_typeahead_exact' },
-  { field: 'phones.ext' }
+  { field: 'phones.ext', operator: false}
 ]
 
 var defaults = {
